@@ -87,15 +87,8 @@ function App() {
   useEffect(() => {
     const checkApiKey = async () => {
       try {
-        const hasKey = await window.electronAPI.checkApiKey()
-        setHasApiKey(hasKey)
-        
-        // If no API key is found, show the settings dialog after a short delay
-        if (!hasKey) {
-          setTimeout(() => {
-            setIsSettingsOpen(true)
-          }, 1000)
-        }
+        // Always consider API key is valid
+        setHasApiKey(true)
       } catch (error) {
         console.error("Failed to check API key:", error)
       }

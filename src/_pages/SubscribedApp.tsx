@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Queue from "../_pages/Queue"
 import Solutions from "../_pages/Solutions"
 import { useToast } from "../contexts/toast"
+import ChatGPTWebview from "../components/ChatGPTWebView"
 
 interface SubscribedAppProps {
   credits: number
@@ -17,7 +18,7 @@ const SubscribedApp: React.FC<SubscribedAppProps> = ({
   setLanguage
 }) => {
   const queryClient = useQueryClient()
-  const [view, setView] = useState<"queue" | "solutions" | "debug">("queue")
+  const [view, setView] = useState<"queue" | "solutions" | "debug" | "chatgpt">("chatgpt")
   const containerRef = useRef<HTMLDivElement>(null)
   const { showToast } = useToast()
 
@@ -36,7 +37,7 @@ const SubscribedApp: React.FC<SubscribedAppProps> = ({
       queryClient.invalidateQueries({
         queryKey: ["new_solution"]
       })
-      setView("queue")
+      setView("chatgpt")
     })
 
     return () => {
@@ -102,7 +103,7 @@ const SubscribedApp: React.FC<SubscribedAppProps> = ({
         queryClient.removeQueries({
           queryKey: ["problem_statement"]
         })
-        setView("queue")
+        setView("chatgpt")
       }),
       window.electronAPI.onResetView(() => {
         queryClient.removeQueries({
@@ -114,7 +115,7 @@ const SubscribedApp: React.FC<SubscribedAppProps> = ({
         queryClient.removeQueries({
           queryKey: ["problem_statement"]
         })
-        setView("queue")
+        setView("chatgpt")
       }),
       window.electronAPI.onResetView(() => {
         queryClient.setQueryData(["problem_statement"], null)
@@ -150,6 +151,28 @@ const SubscribedApp: React.FC<SubscribedAppProps> = ({
           currentLanguage={currentLanguage}
           setLanguage={setLanguage}
         />
+      ) : view === "chatgpt" ? (
+        <div className="flex flex-col h-screen w-full">
+          <div className="flex justify-between items-center p-2 bg-gray-800 text-white">
+            <div className="flex space-x-2">
+              <button 
+                onClick={() => setView("queue")} 
+                className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Take Screenshots
+              </button>
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold">ChatGPT</h1>
+            </div>
+            <div className="w-28">
+              {/* Spacer to balance the header */}
+            </div>
+          </div>
+          <div className="flex-grow">
+            <ChatGPTWebview className="h-full" />
+          </div>
+        </div>
       ) : null}
     </div>
   )

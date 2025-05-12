@@ -207,10 +207,10 @@ async function createWindow(): Promise<void> {
   state.currentY = 50
 
   const windowSettings: Electron.BrowserWindowConstructorOptions = {
-    width: 800,
-    height: 600,
-    minWidth: 750,
-    minHeight: 550,
+    width: 1024,
+    height: 768,
+    minWidth: 800,
+    minHeight: 600,
     x: state.currentX,
     y: 50,
     alwaysOnTop: true,
@@ -220,7 +220,10 @@ async function createWindow(): Promise<void> {
       preload: isDev
         ? path.join(__dirname, "../dist-electron/preload.js")
         : path.join(__dirname, "preload.js"),
-      scrollBounce: true
+      scrollBounce: true,
+      webviewTag: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false
     },
     show: true,
     frame: false,
@@ -296,8 +299,12 @@ async function createWindow(): Promise<void> {
     try {
       const parsedURL = new URL(url);
       const hostname = parsedURL.hostname;
-      const allowedHosts = ["google.com", "supabase.co"];
-      if (allowedHosts.includes(hostname) || hostname.endsWith(".google.com") || hostname.endsWith(".supabase.co")) {
+      const allowedHosts = ["google.com", "supabase.co", "chatgpt.com", "openai.com"];
+      if (allowedHosts.includes(hostname) || 
+          hostname.endsWith(".google.com") || 
+          hostname.endsWith(".supabase.co") || 
+          hostname.endsWith(".chatgpt.com") || 
+          hostname.endsWith(".openai.com")) {
         shell.openExternal(url);
         return { action: "deny" }; // Do not open this URL in a new Electron window
       }

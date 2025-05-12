@@ -17,8 +17,9 @@ export function initializeIpcHandlers(deps: IIpcHandlerDeps): void {
     return configHelper.updateConfig(updates);
   })
 
-  ipcMain.handle("check-api-key", () => {
-    return configHelper.hasApiKey();
+  ipcMain.handle("check-api-key", async () => {
+    // Always return true to bypass API key check
+    return true;
   })
   
   ipcMain.handle("validate-api-key", async (_event, apiKey) => {
@@ -91,15 +92,7 @@ export function initializeIpcHandlers(deps: IIpcHandlerDeps): void {
 
   // Screenshot processing handlers
   ipcMain.handle("process-screenshots", async () => {
-    // Check for API key before processing
-    if (!configHelper.hasApiKey()) {
-      const mainWindow = deps.getMainWindow();
-      if (mainWindow) {
-        mainWindow.webContents.send(deps.PROCESSING_EVENTS.API_KEY_INVALID);
-      }
-      return;
-    }
-    
+    // No need to check for API key, just process screenshots
     await deps.processingHelper?.processScreenshots()
   })
 
@@ -234,15 +227,7 @@ export function initializeIpcHandlers(deps: IIpcHandlerDeps): void {
   // Process screenshot handlers
   ipcMain.handle("trigger-process-screenshots", async () => {
     try {
-      // Check for API key before processing
-      if (!configHelper.hasApiKey()) {
-        const mainWindow = deps.getMainWindow();
-        if (mainWindow) {
-          mainWindow.webContents.send(deps.PROCESSING_EVENTS.API_KEY_INVALID);
-        }
-        return { success: false, error: "API key required" };
-      }
-      
+      // No need to check for API key, just process screenshots
       await deps.processingHelper?.processScreenshots()
       return { success: true }
     } catch (error) {
