@@ -154,19 +154,11 @@ const SubscribedApp: React.FC<SubscribedAppProps> = ({
       ) : view === "chatgpt" ? (
         <div className="flex flex-col h-screen w-full">
           <div className="flex justify-between items-center p-2 bg-gray-800 text-white">
-            <div className="flex space-x-2">
-              <button 
-                onClick={() => setView("queue")} 
-                className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Take Screenshots
-              </button>
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold">ChatGPT</h1>
+            <div className="w-28">
+              {/* Spacer for left side */}
             </div>
             <div className="w-28">
-              {/* Spacer to balance the header */}
+              {/* Spacer for right side */}
             </div>
           </div>
           <div className="flex-grow">
