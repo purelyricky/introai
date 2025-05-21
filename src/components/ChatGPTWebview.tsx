@@ -75,7 +75,7 @@ const ChatGPTWebview: React.FC<ChatGPTWebviewProps> = ({ className = '' }) => {
       */}
       <webview
         ref={webviewRef}
-        src="https://chatgpt.com/"
+        src="https://claude.ai/"
         style={{ width: '100%', height: '100%', border: 'none' }}
         allowpopups
       ></webview>
